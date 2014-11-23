@@ -72,9 +72,32 @@ module.exports.Spreadsheet = React.createClass({
     return value;
   },
 
+  getCol: function(col) {
+    var value = [],
+        _col = parseInt(col, 10);
+
+    try {
+      this.state.rows.map(function(row){
+        var _value = parseInt(row[_col], 10);
+        if(_value) {
+          value.push(_value);
+        }
+      }, this);
+
+    } catch(err) {};
+
+    console.log(value);
+
+    return value;
+  },
+
   render: function() {
     var rows = this.state.rows.map(function(row, i){
-      return <Row key={"row_" + i} cells={row} getCellVal={this.getCellVal} onCellValueChange={this.onDataChange.bind(null, i)} />;
+      return <Row key={"row_" + i}
+                  cells={row}
+                  getCellVal={this.getCellVal}
+                  getCol={this.getCol}
+                  onCellValueChange={this.onDataChange.bind(null, i)} />;
     }, this);
 
     return (

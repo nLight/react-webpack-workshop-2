@@ -7,17 +7,29 @@ module.exports.Cell = React.createClass({
     };
   },
   evalFormula: function(formula) {
+    var match;
+
+    // =sum(0) Sum column with index 0
+    match = /=(sum|mul)\((\d+)\)/.exec(formula);
+    if (match) {
+      return this.props.getCol(match[2]).reduce(function(accu, curr) {
+        return {
+          sum: accu + curr,
+          mul: accu * curr
+        }[match[1]];
+      });
+    }
+
     // =sum(0:0,0:1)
-    var match = /=(sum|mul)\((\d+):(\d+)\,(\d+):(\d+)\)/.exec(formula);
+    match = /=(sum|mul)\((\d+):(\d+)\,(\d+):(\d+)\)/.exec(formula);
     if (match) {
       return {
         sum: this.props.getCellVal(match[2], match[3]) + this.props.getCellVal(match[4], match[5]),
         mul: this.props.getCellVal(match[2], match[3]) * this.props.getCellVal(match[4], match[5])
       }[match[1]];
     }
-    else {
-      return formula;
-    }
+
+    return formula;
   },
 
   getValue: function() {
