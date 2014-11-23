@@ -1,4 +1,5 @@
 var React = require("react");
+var Row = require("./row.jsx").Row;
 
 module.exports.Spreadsheet = React.createClass({
   render: function() {
@@ -12,6 +13,7 @@ module.exports.Spreadsheet = React.createClass({
         </nav>
         <table className="table table-bordered">
           <tbody>
+            <Row />
           </tbody>
         </table>
       </div>
