@@ -66,7 +66,7 @@ module.exports.Spreadsheet = React.createClass({
         _col = parseInt(col, 10);
 
     try {
-      value = parseInt(this.state.rows[_row][_col], 10);
+      value = this.state.rows[_row][_col];
     } catch(err) {};
 
     return value;
@@ -78,7 +78,7 @@ module.exports.Spreadsheet = React.createClass({
 
     try {
       this.state.rows.map(function(row){
-        var _value = parseInt(row[_col], 10);
+        var _value = row[_col];
         if(_value) {
           value.push(_value);
         }
