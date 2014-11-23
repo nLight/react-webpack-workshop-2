@@ -1,4 +1,4 @@
-var React = require("react");
+var React = require("react/lib/ReactWithAddons");
 var Row = require("./row.jsx").Row;
 
 module.exports.Excel = React.createClass({
@@ -6,6 +6,13 @@ module.exports.Excel = React.createClass({
     return {
       rows: [[""]]
     };
+  },
+
+  addRow: function() {
+    var newState = React.addons.update(this.state, {
+      rows: {$push: [[""]]}
+    });
+    this.setState(newState);
   },
 
   render: function() {
@@ -18,6 +25,7 @@ module.exports.Excel = React.createClass({
         <nav className="navbar navbar-default navbar-fixed-bottom" role="navigation">
           <div className="container-fluid">
             <div className="navbar-header">
+              <button className="btn btn-default navbar-btn" onClick={this.addRow}>Add row</button>
             </div>
           </div>
         </nav>
