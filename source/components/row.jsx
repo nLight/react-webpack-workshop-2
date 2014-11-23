@@ -7,6 +7,7 @@ module.exports.Row = React.createClass({
       return <Cell key={"cell_" + i}
                    value={cell}
                    getCellVal={this.props.getCellVal}
+                   getCol={this.props.getCol}
                    onValueChange={this.props.onCellValueChange.bind(null, i)} />;
     }, this);
 
