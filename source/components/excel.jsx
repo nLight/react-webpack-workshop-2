@@ -5,7 +5,7 @@ var Row = require("./row.jsx").Row;
 module.exports.Excel = React.createClass({
   getInitialState: function() {
     return {
-      rows: [[""]]
+      rows: [[10, 23, "=sum(0:0,0:1)"]]
     };
   },
 
@@ -59,9 +59,21 @@ module.exports.Excel = React.createClass({
     this.setState(newState);
   },
 
+  getCellVal: function(row, col) {
+    var value,
+        _row = parseInt(row, 10),
+        _col = parseInt(col, 10);
+
+    try {
+      value = parseInt(this.state.rows[_row][_col], 10);
+    } catch(err) {};
+
+    return value;
+  },
+
   render: function() {
     var rows = this.state.rows.map(function(row, i){
-      return <Row key={"row_" + i} cells={row} onCellValueChange={this.onDataChange.bind(null, i)} />;
+      return <Row key={"row_" + i} cells={row} getCellVal={this.getCellVal} onCellValueChange={this.onDataChange.bind(null, i)} />;
     }, this);
 
     return (
