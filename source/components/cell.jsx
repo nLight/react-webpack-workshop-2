@@ -3,7 +3,7 @@ var React = require("react");
 module.exports.Cell = React.createClass({
   render: function() {
     return (
-      <td>Row</td>
+      <td><input value={this.props.value} /></td>
     );
   }
 });
