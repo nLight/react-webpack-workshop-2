@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var React = require("react/lib/ReactWithAddons");
 var Row = require("./row.jsx").Row;
 
@@ -9,9 +10,37 @@ module.exports.Excel = React.createClass({
   },
 
   addRow: function() {
-    var newState = React.addons.update(this.state, {
-      rows: {$push: [[""]]}
+    var numCols,
+        newRow,
+        newState;
+
+    numCols = this.state.rows[0].length;
+    newRow = _.range(numCols).map(function(){
+      return "";
     });
+
+    newState = React.addons.update(this.state, {
+      rows: {$push: [newRow]}
+    });
+
+    this.setState(newState);
+  },
+
+  addColumn: function() {
+    var newState = React.addons.update(this.state, {
+      rows: {
+        $apply: function(rows) {
+          var _rows = rows.map(function(row){
+            var updatedRow = React.addons.update(row, {
+              $push: [""]
+            });
+            return updatedRow;
+          });
+          return _rows;
+        }
+      }
+    });
+
     this.setState(newState);
   },
 
@@ -26,6 +55,7 @@ module.exports.Excel = React.createClass({
           <div className="container-fluid">
             <div className="navbar-header">
               <button className="btn btn-default navbar-btn" onClick={this.addRow}>Add row</button>
+              <button className="btn btn-default navbar-btn" onClick={this.addColumn}>Add column</button>
             </div>
           </div>
         </nav>
