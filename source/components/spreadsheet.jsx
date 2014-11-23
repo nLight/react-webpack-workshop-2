@@ -45,10 +45,25 @@ module.exports.Spreadsheet = React.createClass({
     this.setState(newState);
   },
 
+  onDataChange: function(row, cell, event) {
+    /*
+      Object key should be an index of array, an integer
+      But we can't specify it as {row: {cell: {$set: value}}} in javascript
+      So we need to use [] interface
+    */
+    var query = {};
+        query[row] = {};
+        query[row][cell] = {$set: event.target.value};
+
+    var newState = update(this.state, { rows: query });
+
+    this.setState(newState);
+  },
+
   render: function() {
     var rows = this.state.rows.map(function(row, i){
-      return <Row key={"row_" + i} cells={row} />;
-    });
+      return <Row key={"row_" + i} cells={row} onCellValueChange={this.onDataChange.bind(null, i)} />;
+    }, this);
 
     return (
       <div>
