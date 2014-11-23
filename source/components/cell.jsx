@@ -1,7 +1,11 @@
 var React = require("react");
 
 module.exports.Cell = React.createClass({
-
+  getInitialState: function() {
+    return {
+      focused: false
+    };
+  },
   evalFormula: function(formula) {
     // =sum(0:0,0:1)
     var match = /=(sum|mul)\((\d+):(\d+)\,(\d+):(\d+)\)/.exec(formula);
@@ -19,7 +23,7 @@ module.exports.Cell = React.createClass({
   getValue: function() {
     var value = this.props.value;
 
-    if (/^=/.test(value.toString())) {
+    if (/^=/.test(value.toString()) && !this.state.focused) {
       return this.evalFormula(value);
     }
     else {
@@ -27,10 +31,20 @@ module.exports.Cell = React.createClass({
     }
   },
 
+  setFocus: function(){
+    this.setState({focused: true});
+  },
+
+  unsetFocus: function(){
+    this.setState({focused: false});
+  },
+
   render: function() {
     return (
       <td><input value={this.getValue()}
-                 onChange={this.props.onValueChange} /></td>
+                 onChange={this.props.onValueChange}
+                 onFocus={this.setFocus}
+                 onBlur={this.unsetFocus} /></td>
     );
   }
 });
