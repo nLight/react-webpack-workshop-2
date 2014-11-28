@@ -2,45 +2,58 @@ var React = require("react");
 var _ = require("underscore");
 var Row = require("./row.jsx").Row;
 var update = require("react-addons-update");
+var classNames = require("classnames");
 
 module.exports.Spreadsheet = React.createClass({
   getInitialState: function() {
     return {
-      rows: [[10, 23, "=sum(0:0,0:1)"]]
+      activeSheetIndex: 0,
+      sheets: [
+        [[10, 23, "=sum(0:0,0:1)"]]
+      ],
     };
   },
 
   addRow: function() {
-    var numCols,
+    var sheet = this.getActiveSheet(),
+        numCols,
         newRow,
-        newState;
+        newState,
+        query;
 
-    numCols = this.state.rows[0].length;
+    numCols = sheet[0].length;
     newRow = _.range(numCols).map(function(){
       return "";
     });
 
-    newState = update(this.state, {
-      rows: {$push: [newRow]}
-    });
+    query = { sheets: {} };
+    query.sheets[this.state.activeSheetIndex] = {
+      $push: [newRow],
+    };
+
+    newState = update(this.state, query);
 
     this.setState(newState);
   },
 
   addColumn: function() {
-    var newState = update(this.state, {
-      rows: {
-        $apply: function(rows) {
-          var _rows = rows.map(function(row){
-            var updatedRow = update(row, {
-              $push: [""]
-            });
-            return updatedRow;
+    var newState,
+        query;
+
+    query = { sheets: {} };
+    query.sheets[this.state.activeSheetIndex] = {
+      $apply: function(rows) {
+        var _rows = rows.map(function(row){
+          var updatedRow = update(row, {
+            $push: [""]
           });
-          return _rows;
-        }
+          return updatedRow;
+        });
+        return _rows;
       }
-    });
+    };
+
+    newState = update(this.state, query);
 
     this.setState(newState);
   },
@@ -51,33 +64,36 @@ module.exports.Spreadsheet = React.createClass({
       But we can't specify it as {row: {cell: {$set: value}}} in javascript
       So we need to use [] interface
     */
-    var query = {};
-        query[row] = {};
-        query[row][cell] = {$set: event.target.value};
+    var query = { sheets: {} };
+        query.sheets[this.state.activeSheetIndex] = {};
+        query.sheets[this.state.activeSheetIndex][row] = {};
+        query.sheets[this.state.activeSheetIndex][row][cell] = {$set: event.target.value};
 
-    var newState = update(this.state, { rows: query });
+    var newState = update(this.state, query);
 
     this.setState(newState);
   },
 
   getCellVal: function(row, col) {
     var value,
-        _row = parseInt(row, 10),
-        _col = parseInt(col, 10);
+        sheet = this.getActiveSheet(),
+        _row  = parseInt(row, 10),
+        _col  = parseInt(col, 10);
 
     try {
-      value = this.state.rows[_row][_col];
+      value = sheet[_row][_col];
     } catch(err) {};
 
     return value;
   },
 
   getCol: function(col) {
-    var value = [],
+    var sheet = this.getActiveSheet(),
+        value = [],
         _col = parseInt(col, 10);
 
     try {
-      this.state.rows.map(function(row){
+      sheet.map(function(row){
         var _value = row[_col];
         if(_value) {
           value.push(_value);
@@ -86,13 +102,30 @@ module.exports.Spreadsheet = React.createClass({
 
     } catch(err) {};
 
-    console.log(value);
-
     return value;
   },
 
+  getActiveSheet: function() {
+    return this.state.sheets[this.state.activeSheetIndex];
+  },
+
   render: function() {
-    var rows = this.state.rows.map(function(row, i){
+
+    var sheet = this.getActiveSheet();
+
+    var sheets = this.state.sheets.map(function(sheet, i){
+      var sheetClass = classNames({
+        active: i == this.state.activeSheetIndex
+      });
+
+      return(
+        <li role="presentation" className={sheetClass}>
+          <a href="#">Sheet {i+1}</a>
+        </li>
+      );
+    }, this);
+
+    var rows  = sheet.map(function(row, i){
       return <Row key={"row_" + i}
                   cells={row}
                   getCellVal={this.getCellVal}
@@ -110,6 +143,9 @@ module.exports.Spreadsheet = React.createClass({
             </div>
           </div>
         </nav>
+        <ul className="nav nav-tabs">
+          { sheets }
+        </ul>
         <table className="table table-bordered">
           <tbody>
             { rows }
