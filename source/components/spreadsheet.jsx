@@ -18,7 +18,7 @@ module.exports.Spreadsheet = React.createClass({
     var newState,
         newSheet;
 
-    newSheet = [[]];
+    newSheet = [[""]];
 
     newState = update(this.state, {
       sheets: {
@@ -124,6 +124,11 @@ module.exports.Spreadsheet = React.createClass({
     return this.state.sheets[this.state.activeSheetIndex];
   },
 
+  activateSheet: function(index) {
+    var newState = update(this.state, {activeSheetIndex: {$set: index}});
+    this.setState(newState);
+  },
+
   render: function() {
 
     var sheet = this.getActiveSheet();
@@ -134,8 +139,8 @@ module.exports.Spreadsheet = React.createClass({
       });
 
       return(
-        <li role="presentation" className={sheetClass}>
-          <a href="#">Sheet {i+1}</a>
+        <li key={"sheet_" + i} role="presentation" className={sheetClass}>
+          <a href="#" onClick={this.activateSheet.bind(null, i)}>Sheet {i+1}</a>
         </li>
       );
     }, this);
