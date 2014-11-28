@@ -1,4 +1,5 @@
 var React = require("react");
+var classNames = require('classnames');
 
 module.exports.Cell = React.createClass({
   getInitialState: function() {
@@ -39,13 +40,18 @@ module.exports.Cell = React.createClass({
     return parseFloat(formula, 10);
   },
 
+  isFormula: function() {
+    var value = this.props.value;
+    return /^=/.test(value.toString());
+  },
+
   getValue: function() {
     var value = this.props.value;
 
-    if (/^=/.test(value.toString()) && !this.state.focused) {
+    if (this.isFormula() && !this.state.focused) {
       return this.evalFormula(value);
     }
-    else if (/^=/.test(value.toString()) || value === "") {
+    else if (this.isFormula() || value === "") {
       return value;
     }
     else {
@@ -62,8 +68,12 @@ module.exports.Cell = React.createClass({
   },
 
   render: function() {
+    var cellClass = classNames({
+      formulaCell: this.isFormula()
+    });
     return (
-      <td><input value={this.getValue()}
+      <td><input className={cellClass}
+                 value={this.getValue()}
                  onChange={this.props.onValueChange}
                  onFocus={this.setFocus}
                  onBlur={this.unsetFocus} /></td>
