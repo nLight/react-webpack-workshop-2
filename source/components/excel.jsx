@@ -12,6 +12,21 @@ module.exports.Excel = React.createClass({
     };
   },
 
+  addSheet: function() {
+    var newState,
+        newSheet;
+
+    newSheet = [[]];
+
+    newState = React.addons.update(this.state, {
+      sheets: {
+        $push: [newSheet]
+      }
+    });
+
+    this.setState(newState);
+  },
+
   addRow: function() {
     var sheet = this.getActiveSheet(),
         numCols,
@@ -138,6 +153,7 @@ module.exports.Excel = React.createClass({
         <nav className="navbar navbar-default navbar-fixed-bottom" role="navigation">
           <div className="container-fluid">
             <div className="navbar-header">
+              <button className="btn btn-default navbar-btn" onClick={this.addSheet}>Add sheet</button>
               <button className="btn btn-default navbar-btn" onClick={this.addRow}>Add row</button>
               <button className="btn btn-default navbar-btn" onClick={this.addColumn}>Add column</button>
             </div>
