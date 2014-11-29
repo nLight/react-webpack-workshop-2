@@ -159,7 +159,7 @@ module.exports.Excel = React.createClass({
           <div className="container-fluid">
             <div className="navbar-header">
               <button className="btn btn-default navbar-btn" onClick={this.addSheet}>Add sheet</button>
-              <button className="btn btn-default navbar-btn" onClick={this.addRow}>Add row</button>
+              <button className="btn btn-default navbar-btn add-row-button" onClick={this.addRow}>Add row</button>
               <button className="btn btn-default navbar-btn" onClick={this.addColumn}>Add column</button>
             </div>
           </div>
