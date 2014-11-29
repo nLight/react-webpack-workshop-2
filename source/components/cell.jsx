@@ -1,6 +1,13 @@
 var React = require("react");
 
 module.exports.Cell = React.createClass({
+  propTypes: {
+    value: React.PropTypes.any.isRequired,
+    getCellVal: React.PropTypes.func.isRequired,
+    getCol: React.PropTypes.func.isRequired,
+    onValueChange: React.PropTypes.func.isRequired
+  },
+
   getInitialState: function() {
     return {
       focused: false
