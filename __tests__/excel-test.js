@@ -5,10 +5,12 @@ describe("Add row", function(){
   it("adds a row on click", function(){
     var React = require("react/addons");
     var Excel = require("../source/components/excel.jsx").Excel;
+    var AddRowButton = require("../source/components/excel.jsx").AddRowButton;
     var Row = require("../source/components/row.jsx").Row;
     var TU = React.addons.TestUtils;
 
     var rows,
+        buttonComponent,
         button,
         excel;
 
@@ -21,7 +23,9 @@ describe("Add row", function(){
     // One row by default
     expect(rows.length).toBe(1);
 
-    button = TU.findRenderedDOMComponentWithClass(excel, 'add-row-button');
+    // Actual Test
+    buttonComponent = TU.findRenderedComponentWithType(excel, AddRowButton);
+    button = TU.findRenderedDOMComponentWithTag(buttonComponent, 'button');
     TU.Simulate.click(button);
 
     rows = TU.scryRenderedComponentsWithType(excel, Row);

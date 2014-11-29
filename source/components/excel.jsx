@@ -2,7 +2,20 @@ var _ = require("underscore");
 var React = require("react/lib/ReactWithAddons");
 var Row = require("./row.jsx").Row;
 
-module.exports.Excel = React.createClass({
+var NavButton = React.createClass({
+  render: function() {
+    return <button className="btn btn-default navbar-btn"
+                   onClick={this.props.onClick}>{this.props.children}</button>
+  }
+});
+
+var AddRowButton = React.createClass({
+  render: function() {
+    return <NavButton {...this.props}>Add row</NavButton>
+  }
+});
+
+var Excel = React.createClass({
   getInitialState: function() {
     return {
       activeSheetIndex: 0,
@@ -159,7 +172,7 @@ module.exports.Excel = React.createClass({
           <div className="container-fluid">
             <div className="navbar-header">
               <button className="btn btn-default navbar-btn" onClick={this.addSheet}>Add sheet</button>
-              <button className="btn btn-default navbar-btn add-row-button" onClick={this.addRow}>Add row</button>
+              <AddRowButton onClick={this.addRow} />
               <button className="btn btn-default navbar-btn" onClick={this.addColumn}>Add column</button>
             </div>
           </div>
@@ -176,3 +189,8 @@ module.exports.Excel = React.createClass({
     );
   }
 });
+
+module.exports = {
+  Excel: Excel,
+  AddRowButton: AddRowButton
+};
