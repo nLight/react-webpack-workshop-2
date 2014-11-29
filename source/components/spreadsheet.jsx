@@ -82,7 +82,7 @@ module.exports.Spreadsheet = React.createClass({
         <nav className="navbar navbar-default navbar-fixed-bottom" role="navigation">
           <div className="container-fluid">
             <div className="navbar-header">
-              <button className="btn btn-default navbar-btn" onClick={this.addRow}>Add row</button>
+              <button className="btn btn-default navbar-btn add-row-button" onClick={this.addRow}>Add row</button>
               <button className="btn btn-default navbar-btn" onClick={this.addColumn}>Add column</button>
             </div>
           </div>
