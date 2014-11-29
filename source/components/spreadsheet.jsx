@@ -3,7 +3,20 @@ var _ = require("underscore");
 var Row = require("./row.jsx").Row;
 var update = require("react-addons-update");
 
-module.exports.Spreadsheet = React.createClass({
+var NavButton = React.createClass({
+  render: function() {
+    return <button className="btn btn-default navbar-btn"
+                   onClick={this.props.onClick}>{this.props.children}</button>
+  }
+});
+
+var AddRowButton = React.createClass({
+  render: function() {
+    return <NavButton {...this.props}>Add row</NavButton>
+  }
+});
+
+var Spreadsheet = React.createClass({
   getInitialState: function() {
     return {
       rows: [[10, 23, "=sum(0:0,0:1)"]]
@@ -82,7 +95,7 @@ module.exports.Spreadsheet = React.createClass({
         <nav className="navbar navbar-default navbar-fixed-bottom" role="navigation">
           <div className="container-fluid">
             <div className="navbar-header">
-              <button className="btn btn-default navbar-btn add-row-button" onClick={this.addRow}>Add row</button>
+              <AddRowButton onClick={this.addRow} />
               <button className="btn btn-default navbar-btn" onClick={this.addColumn}>Add column</button>
             </div>
           </div>
@@ -96,3 +109,8 @@ module.exports.Spreadsheet = React.createClass({
     );
   }
 });
+
+module.exports = {
+  Spreadsheet: Spreadsheet,
+  AddRowButton: AddRowButton
+};

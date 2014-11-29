@@ -6,9 +6,11 @@ describe("Add row", function(){
     var React = require("react");
     var TU = require('react-addons-test-utils');
     var Spreadsheet = require("../source/components/spreadsheet.jsx").Spreadsheet;
+    var AddRowButton = require("../source/components/spreadsheet.jsx").AddRowButton;
     var Row = require("../source/components/row.jsx").Row;
 
     var rows,
+        buttonComponent,
         button,
         spreadsheet;
 
@@ -21,7 +23,9 @@ describe("Add row", function(){
     // One row by default
     expect(rows.length).toBe(1);
 
-    button = TU.findRenderedDOMComponentWithClass(spreadsheet, 'add-row-button');
+    // Actual Test
+    buttonComponent = TU.findRenderedComponentWithType(spreadsheet, AddRowButton);
+    button = TU.findRenderedDOMComponentWithTag(buttonComponent, 'button');
     TU.Simulate.click(button);
 
     rows = TU.scryRenderedComponentsWithType(spreadsheet, Row);
