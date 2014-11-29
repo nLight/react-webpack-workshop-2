@@ -5,7 +5,7 @@
   "repository": "https://source.xing.com/dmitriy-rozhkov/react-workshop",
   "scripts": {
     "devserver": "webpack-dev-server --config server.config.js --content-base ./devserver_files --port 9500 --colors",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "webpack",
@@ -37,5 +37,14 @@
     "jest-cli": "^0.8.0",
     "react-addons-test-utils": "0.14.3",
     "react-tools": "0.12.1"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/preprocessor.js",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/fbjs",
+      "<rootDir>/node_modules/react-dom",
+      "<rootDir>/node_modules/react-addons-test-utils"
+    ]
   }
 }
